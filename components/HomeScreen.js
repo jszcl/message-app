@@ -19,7 +19,7 @@ export default class HomeScreen extends React.Component {
         tabBar: {
             label: 'Home',
             icon: ({tintcolor}) => (
-                <Image source={require('../img/shop.png')} style={[{tintcolor:tintcolor}]}/>
+                <Image source={require('../img/news.png')} style={[{tintcolor:tintcolor}]}/>
             )
         },
         title: '主页'
@@ -49,7 +49,7 @@ export default class HomeScreen extends React.Component {
         this.setState({refreshing: true});
         let newData;
         const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-        fetch('http://127.0.0.1:8080/news',{method:'post',headers:{}})
+        fetch('http://127.0.0.1:8080/news',{method:'post',})
             .then((response) => response.json())
             .then((responseJson) => {
                 newData=responseJson.greet;
