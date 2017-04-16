@@ -6,6 +6,7 @@
 
 import React, {Component} from 'react';
 import {
+    Alert,
     AppRegistry,
     StyleSheet,
     Text,
@@ -25,21 +26,56 @@ import {
 
 import {StackNavigator} from 'react-navigation';
 import {TabNavigator}   from 'react-navigation';
-import HomeScreen from './components/HomeScreen'
-
-
-
+import HomeScreen from './components/HomeScreen';
+import InformScreen from './components/InformScreen';
+import ScoreScreen from './components/ScoreScreen';
+import FaqScreen from './components/FaqScreen';
+import  ChooseScreen from './components/ChooseScreen';
+import FixScreen from './components/FixScreen'
 class LoginScreen extends React.Component {
-    static navigationOptions = {};
+    static navigationOptions = {header:{
+        left:null
+
+
+    },
+        cardStack:{gesturesEnabled:false}};
 
     constructor(props) {
         super(props);
+        this.state = {
+          CMCODE:'',
+            REGPASSWORD:''
+        };
         this.submits = this.submits.bind(this);
     }
 
     submits() {
+
         const {navigate}= this.props.navigation;
-        navigate('Home')
+        // const lists= {
+        //   CMCODE:this.state.CMCODE, REGPASSWORD: this.state.REGPASSWORD
+        // };
+        // fetch('http://127.0.0.1:8080/login', {
+        //     method: 'post',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify(lists),
+        // })
+        //     .then((response) => {
+        //
+        //         return response.json()
+        //     })
+        //     .then((responseData) => {
+        //         Alert.alert(responseData[0]);
+        //         if(responseData [0]== 'success'){
+        //             navigate('ChooseScreen',{name:responseData[1]})
+        //         }
+        //     })
+        //     .catch((error) => {
+        //         console.error('error', error)
+        //     });
+        navigate('ChooseScreen',{name:'blunt'})
     }
 
     render() {
@@ -52,12 +88,13 @@ class LoginScreen extends React.Component {
                 </View>
                 <View style={{alignSelf:'stretch'}}>
                     <TextInput style={{height:35,borderColor:'gray',borderWidth:0.5,margin:10,borderRadius:5}}
-                               placeholder='请输入用户名'>
+                               placeholder='请输入用户名' onChangeText={(text)=>this.setState({CMCODE:text}) }>
+
 
                     </TextInput>
-                    <TextInput secureTextEntry={true}
+                    <TextInput secureTextEntry={true} type="number"
                                style={{height:35,borderColor:'gray',borderWidth:0.5,margin:10,borderRadius:5}}
-                               placeholder='请输入密码'>
+                               placeholder='请输入密码' onChangeText={(text)=>this.setState({REGPASSWORD:text})}>
 
                     </TextInput>
                 </View>
@@ -72,107 +109,11 @@ class LoginScreen extends React.Component {
 }
 
 
-class ChatScreen extends React.Component {
-    static navigationOptions = {
-        tabBar: {
-            label: '故障报修',
-            icon: ({tintcolor}) => (
-                <Image source={require('./img/tool.png')} style={[{tintcolor:tintcolor}]}/>
-            )
-        },
-        title: '故障报修'
-    };
-
-    render() {
-        return (
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <View >
-                    <Text>请填写报修信息</Text>
-                    <View
-                        style={{height: 40,width:80}}
 
 
-                    />
-                    <Text>设备类型</Text>
-                    <TextInput style={styles.inputs} placeholder='设备类型'/>
-                    <Text>联系人</Text>
-                    <TextInput style={styles.inputs} placeholder='联系人'/>
-                    <Text>联系人电话</Text>
-                    <TextInput keyboardType="numeric" style={styles.inputs} placeholder='联系人电话'/>
-                    <Text>故障说明</Text>
-                    <TextInput style={{height:160,width:500, borderColor:'gray',borderWidth:0.5}} placeholder='故障说明'/>
-                    <View>
-                        <Button title='提交' onPress={()=>alert('已提交')}/>
-                    </View>
-                </View></TouchableWithoutFeedback>
-        );
-    }
-}
 
-class ScoreScreen extends React.Component {
-    static navigationOptions = {
-        tabBar: {
-            label: '评价',
-            icon: ({tintcolor}) => (
-                <Image source={require('./img/star.png')} style={[{tintcolor:tintcolor}]}/>
-            )
-        },
-        title: '评价'
-    };
 
-    constructor(props) {
-        super(props);
 
-        this.state = {star: '3星', stars: '', opc: 0};
-    }
-
-    render() {
-        return (
-            <View>
-                <Text style={{fontSize:20}}> 未评价</Text>
-
-                <View >
-
-                    <View style={{left:80}}><Text> 日期20170321   单号：001</Text></View>
-                    <View style={{left:70}}><Slider width={180} maximumValue={5} minimumValue={1} step={1} value={3}
-                                                    onValueChange={(value)=>this.setState({star:value+'星'})}><Text>{this.state.star}</Text></Slider></View>
-                    <Button title='确认' onPress={()=>this.setState({stars:('维修单号(001):'+this.state.star)})}/></View>
-                <View style={{top:200}}>
-                    <Text style={{fontSize:20}}>
-                        已评价
-                    </Text>
-                    <Text>
-                        {this.state.stars}
-                    </Text>
-                </View>
-            </View>
-        );
-    }
-}
-
-class FaqScreen extends React.Component {
-    static navigationOptions = {
-        tabBar: {
-            label: '常见问题',
-            icon: ({tintcolor}) => (
-                <Image source={require('./img/mush.png')} style={[{tintcolor:tintcolor}]}/>
-            )
-        },
-        title: '常见问题'
-    };
-
-    constructor(props) {
-        super(props)
-    }
-
-    render() {
-        return (
-            <View>
-
-            </View>
-        )
-    }
-}
 
 const styles = StyleSheet.create({
     navbutton: {
@@ -195,19 +136,34 @@ const styles = StyleSheet.create({
 })
 const MainScreenNavigator = TabNavigator({
         Home: {screen: HomeScreen},
-        Fix: {screen: ChatScreen},
+        Inform: {screen: InformScreen},
         Score: {screen: ScoreScreen},
         Faq: {screen: FaqScreen}
     },
     {
         tabBarOptions: {
             activeTintColor: 'rgb(18,120,189)',
+
+        },
+    });
+const ViceScreenNavigator = TabNavigator({
+        Home: {screen: HomeScreen},
+        Fix: {screen: FixScreen},
+        Score: {screen: ScoreScreen},
+        Faq: {screen: FaqScreen}
+    },
+    {
+        tabBarOptions: {
+            activeTintColor: 'rgb(18,120,189)',
+
         },
     });
 
 const SimpleApp = StackNavigator({
     LoginScreen: {screen: LoginScreen},
-    Home: {screen: MainScreenNavigator},
+    ChooseScreen: {screen: ChooseScreen},
+    MainScreen: {screen: MainScreenNavigator},
+    ViceScreen:{screen:ViceScreenNavigator}
 
 
 });

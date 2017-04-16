@@ -22,7 +22,12 @@ export default class HomeScreen extends React.Component {
                 <Image source={require('../img/news.png')} style={[{tintcolor:tintcolor}]}/>
             )
         },
-        title: '主页'
+        title: '主页',
+        header:{
+            style:{backgroundColor:''},
+            titleStyle:{color:'grey'}
+        }
+
     };
 
 
@@ -54,11 +59,11 @@ export default class HomeScreen extends React.Component {
             .then((responseJson) => {
                 newData=responseJson.greet;
 
-                alert(newData[0]);
+                // alert(newData[0]);
                 this.setState({
 
                     dataSource:ds.cloneWithRows(newData)
-                })
+                });
                 this.setState({refreshing:false});
             })
             .catch((error) => {
@@ -70,6 +75,7 @@ export default class HomeScreen extends React.Component {
     }
     render() {
         const {navigate} = this.props.navigation;
+
         return (
             <View style={styles.viewStyle}>
 
@@ -78,6 +84,7 @@ export default class HomeScreen extends React.Component {
                     renderRow={(rowData) => <TouchableOpacity style={styles.touchStyle}><Text style={styles.rowStyle}>{rowData}</Text></TouchableOpacity>} >
 
                 </ListView>
+
             </View>
         );
     }
@@ -101,8 +108,7 @@ const styles=StyleSheet.create({
 
         padding: 10,
         margin: 6,
-        borderRadius:9,
-        borderWidth:0.3,
+
 
 
     },

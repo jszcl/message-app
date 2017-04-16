@@ -37,11 +37,11 @@ const photoOptions = {
 };
 
 
-export default  class ChatScreen extends React.Component {
+export default  class InformScreen extends React.Component {
     static navigationOptions = {
         tabBar: {
             label: '故障报修',
-            backgroundColor: 'green',
+
             icon: ({tintcolor}) => (
                 <Image source={require('../img/tool.png')} style={[{tintcolor:tintcolor}]}/>
             )
@@ -51,15 +51,18 @@ export default  class ChatScreen extends React.Component {
 
     constructor(props) {
         super(props);
+        const abc = this.props.navigation.state;
         this.state = {
             avatarSource: '',
             errorType: 'UPS故障',
 
-            deviceName: '',
-            contactName: '',
-            contactNumber: '',
+            placeName: '',
+            contactName: abc.params.name,
+            phoneNumber: '',
             otherInfo: '',
-            rated: false
+            rated: false,
+
+
 
 
         };
@@ -120,12 +123,13 @@ export default  class ChatScreen extends React.Component {
 
         let lists = {
             errortype: this.state.errorType,
-            devicename: this.state.deviceName,
-            name: this.state.contactName,
-            phonenumber: this.state.contactNumber,
-            info: this.state.otherInfo,
+            placename: this.state.placeName,
+            contactname: this.state.contactName,
+            phonenumber: this.state.phoneNumber,
+            otherinfo: this.state.otherInfo,
             rated: this.state.rated,
             number: datenow,
+            fixed: false
 
         };
         console.log(JSON.stringify(lists));
@@ -141,9 +145,9 @@ export default  class ChatScreen extends React.Component {
                     avatarSource: '',
                     errorType: 'UPS故障',
 
-                    deviceName: '',
-                    contactName: '',
-                    contactNumber: '',
+                    placeName: '',
+
+                    phoneNumber: '',
                     otherInfo: '',
                     rated: false
                 });
@@ -159,6 +163,7 @@ export default  class ChatScreen extends React.Component {
     }
 
     render() {
+
         return (
             <View>
                 <ScrollView>
@@ -173,19 +178,19 @@ export default  class ChatScreen extends React.Component {
                                     onValueChange={(val)=>this.setState({errorType:val})}>
                                 <Picker.Item label="网络故障" value="网络故障"/>
                                 <Picker.Item label="UPS故障" value="UPS故障"/>
-                                <Picker.Item label="应用系统故障" value="应用系统故障"/>
-                                <Picker.Item label='硬件故障' value='硬件故障'/>
+                                <Picker.Item label="办公电脑故障" value="办公电脑故障"/>
+                                <Picker.Item label='BL终端故障' value='BL终端故障'/>
+                                <Picker.Item label='其他故障' value='其他故障'/>
+
                             </Picker>
-                            <TextInput style={styles.inputs} placeholder='设备名称(型号)' value={this.state.deviceName}
-                                       onChangeText={(text)=>this.setState({deviceName:text})}/>
+                            <Text style={{margin:10}}> 报修人: {this.state.contactName}</Text>
+                            <TextInput style={styles.inputs} placeholder='部门或网点名称' value={this.state.placeName}
+                                       onChangeText={(text)=>this.setState({placeName:text})}/>
 
-                            <TextInput style={styles.inputs} maxLength={6} placeholder='联系人'
-                                       value={this.state.contactName}
-                                       onChangeText={(text)=>this.setState({contactName:text})}/>
-
+                            
                             <TextInput keyboardType="numeric" style={styles.inputs} placeholder='联系人电话'
-                                       value={this.state.contactNumber}
-                                       onChangeText={(text)=>this.setState({contactNumber:text})}/>
+                                       value={this.state.phoneNumber}
+                                       onChangeText={(text)=>this.setState({phoneNumber:text})}/>
 
                             <TextInput style={styles.inputs} placeholder='故障说明' value={this.state.otherInfo}
                                        onChangeText={(text)=>this.setState({otherInfo:text})}/>
@@ -210,7 +215,7 @@ export default  class ChatScreen extends React.Component {
 
 
                             <Button title="提交" color={'rgb(0,95,60)'}
-                                    disabled={!(this.state.deviceName && this.state.contactName && this.state.contactNumber && this.state.otherInfo)}
+                                    disabled={!(this.state.placeName && this.state.contactName && this.state.phoneNumber && this.state.otherInfo)}
                                     onPress={this.submitAll}/>
                         </View>
 

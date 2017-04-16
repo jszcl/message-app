@@ -38,7 +38,7 @@ export default  class FaqScreen extends React.Component {
 
     render() {
         return (
-            <ScrollView style={{flex:1,backgroundColor: 'grey',paddingTop: 30 }}>
+            <ScrollView style={{flex:1,paddingTop: 30 }}>
                 <Panel title='A Panel with short content text'>
                     <Text>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Text>
                 </Panel>
