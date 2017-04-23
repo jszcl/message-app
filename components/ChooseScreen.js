@@ -17,6 +17,9 @@ import {
 
 export default  class LoginScreen extends React.Component {
     static navigationOptions = {header:{
+        style:{backgroundColor:'#3b5998'},
+        titleStyle:{color:'white'},
+        left:null
 
 
 
@@ -26,7 +29,7 @@ export default  class LoginScreen extends React.Component {
     constructor(props) {
         super(props);
         const abc = this.props.navigation.state;
-        this.state={name:abc.params.name};
+        this.state={name:abc.params.name,id:abc.params.id};
         this.btn1=this.btn1.bind(this);
         this.btn2=this.btn2.bind(this);
     }
@@ -34,12 +37,12 @@ export default  class LoginScreen extends React.Component {
     btn1 () {
         const {navigate}= this.props.navigation;
 
-        navigate('MainScreen',{name:this.state.name})
+        navigate('MainScreen',{name:this.state.name,id:this.state.id})
     }
 
     btn2 (){
         const {navigate}= this.props.navigation;
-        navigate('ViceScreen')
+        navigate('ViceScreen',{id:this.state.id,fixname:this.state.name})
     }
 
     render () {

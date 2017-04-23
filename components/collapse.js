@@ -29,7 +29,7 @@ export default class extends Component {
 
         this.state = {
             expanded: props.expanded,
-            animation: new Animated.Value(30)
+            animation: new Animated.Value(40)
         };
         this.toggle=this.toggle.bind(this);
     }

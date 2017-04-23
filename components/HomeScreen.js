@@ -12,21 +12,30 @@ import {
     ListView,
     RefreshControl
     } from 'react-native';
-
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default class HomeScreen extends React.Component {
     static navigationOptions = {
         tabBar: {
             label: 'Home',
-            icon: ({tintcolor}) => (
-                <Image source={require('../img/news.png')} style={[{tintcolor:tintcolor}]}/>
+            icon: (obj) => (
+
+                <Icon name="rocket" size={30}  color= {obj.tintColor} />
             )
         },
         title: '主页',
-        header:{
-            style:{backgroundColor:''},
-            titleStyle:{color:'grey'}
-        }
+
+        header: (navigation) => ({
+
+            style:{backgroundColor:'#3b5998'},
+            titleStyle:{color:'white'},
+            right: <Icon.Button name="power-off"  backgroundColor='#1d9d74' onPress={()=>navigation.navigate('LoginScreen')}>
+                <Text style={{color:'white'}}>注销</Text>
+            </Icon.Button>,
+            left: <Icon name="chevron-left"  color='white' size={25} onPress={()=>navigation.goBack(null)} />
+        })
+
+
 
     };
 
@@ -85,6 +94,7 @@ export default class HomeScreen extends React.Component {
 
                 </ListView>
 
+
             </View>
         );
     }
@@ -95,19 +105,26 @@ export default class HomeScreen extends React.Component {
 const styles=StyleSheet.create({
     viewStyle:{
         borderRadius:5,
-        flexDirection:'column'
+        flexDirection:'column',
+
+
+
     },
     touchStyle:{
 
     },
     rowStyle: {
-        backgroundColor: 'skyblue',
+        backgroundColor: 'white',
         alignItems: 'center',    //#水平居中s
         justifyContent: 'center',//  #垂直居中
         textAlign: 'left',  // #文字水平居中
 
         padding: 10,
         margin: 6,
+
+        marginLeft:0,
+        marginRight:0
+
 
 
 

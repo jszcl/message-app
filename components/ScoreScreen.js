@@ -13,54 +13,141 @@ import {
     RefreshControl,
     Slider,
     SegmentedControlIOS,
+    Dimensions
 } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 export default  class ScoreScreen extends React.Component {
     static navigationOptions = {
         tabBar: {
             label: '评价',
-            icon: ({tintcolor}) => (
-                <Image source={require('../img/rate.png')} style={[{tintcolor:tintcolor}]} />
+            icon: (obj) => (
 
-            )
+                <Icon name="star-half-empty" size={30}  color= {obj.tintColor} />
+            ),
         },
         title: '评价',
         header:{
-            left:null
+            left:null,
+            style:{backgroundColor:'#3b5998'},
+            titleStyle:{color:'white'},
+
+
+
+
         }
     };
 
     constructor(props) {
         super(props);
+        this.state={
+            id:this.props.navigation.state.params.id,
+            refreshing:false,
+            dataSource:[{errortype:'yuyy',name:'ty'}, {errortype:'ui',name:'yuii'}],
+            selectIndex:''
+        };
+        this.updateSource=this.updateSource.bind(this);
+        this.toDateString=this.toDateString.bind(this);
 
-        this.state = {star: '3星', stars: '', opc: 0};
-        this.btn=this.btn.bind(this)
+
     }
-    btn() {
-        const {navigate}= this.props.navigation;
-        navigate('LoginScreen')
+    // btn() {
+    //     const {navigate}= this.props.navigation;
+    //     navigate('LoginScreen')
+    // }
+
+    componentDidMount() {
+
+        this.updateSource();
     }
+    updateSource(){
+        let lists= {id:this.state.id};
+        fetch('http://127.0.0.1:8080/rate',{method:'post',
+            headers: {
+            'Content-Type': 'application/json'
+        },
+            body: JSON.stringify(lists),})
+            .then((response) => response.json())
+            .then((responseJson) => {
+
+                newData=responseJson.greet;
+
+                this.setState({dataSource:newData});
+
+                console.log(newData);
+                this.setState({refreshing:false})
+
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+
+    }
+
+    toDateString(n) {
+        let a = new Date(n);
+         return (a.toLocaleDateString())
+    }
+
     render() {
+        const {height, width} = Dimensions.get('window');
+        const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         return (
             <View>
 
-                <View style={{marginBottom: 10}}>
-                    <SegmentedControlIOS values={['未评价', '已评价','yi']} selectedIndex={0} />
-                </View>
-                <View >
+                {/*<View style={{marginBottom: 10}}>*/}
+                    {/*<SegmentedControlIOS values={['未评价', '已评价']} selectedIndex={0} onValueChange={(value)=>{this.setState({selectIndex:value})}}/>*/}
+                {/*</View>*/}
 
-                    <View style={{left:80}}><Text> 日期20170321   单号：001</Text></View>
-                    <View style={{left:70}}><Slider width={180} maximumValue={5} minimumValue={1} step={1} value={3}
-                                                    onValueChange={(value)=>this.setState({star:value+'星'})}><Text>{this.state.star}</Text></Slider></View>
-                    <Button title='确认' onPress={this.btn}/></View>
-                <View style={{top:200}}>
-                    <Text style={{fontSize:20}}>
-                        已评价
-                    </Text>
-                    <Text>
-                        {this.state.stars}
-                    </Text>
+                <View style={styles.viewStyle}>
+
+                    <ListView
+                        style={{height:height-110}}
+                        refreshControl={ <RefreshControl  refreshing={this.state.refreshing} onRefresh={this.updateSource} />}
+                        dataSource={ds.cloneWithRows(this.state.dataSource)}
+                        renderRow={(rowData) => <TouchableOpacity style={styles.touchStyle}>
+                    <View style={{flexDirection:'row',justifyContent:'space-between',backgroundColor:'white',marginTop:20}} >
+                    <Text style={styles.rowStyle}>{rowData.errortype}</Text>
+                    <Text style={styles.rowStyle}>{this.toDateString(rowData.number)}</Text>
+                    <View style={{width:80,marginTop:10 }}>
+               {rowData.fixed  ? <Icon.Button name='arrow-right' backgroundColor="#3b5998" size={10} iconStyle={{}} onPress={()=>{this.props.navigation.navigate('rate',{name:rowData,refresh:this.updateSource})}}>
+                    评价
+                </Icon.Button> : <Text>待维修</Text>}
                 </View>
+
+
+
+                    </View>
+                    </TouchableOpacity>}>
+
+                    </ListView>
+
+                </View>
+
+
             </View>
         );
     }
 }
+
+const styles=StyleSheet.create({
+    viewStyle:{
+        borderRadius:0,
+        flexDirection:'column'
+    },
+    touchStyle:{
+        borderBottomWidth:1,
+        borderColor:'rgb(204,204,204)'
+    },
+    rowStyle: {
+        backgroundColor: 'white',
+        alignItems: 'center',    //#水平居中s
+        justifyContent: 'center',//  #垂直居中
+        textAlign: 'left',  // #文字水平居中
+
+        padding: 10,
+        margin: 6,
+
+
+
+    },
+});

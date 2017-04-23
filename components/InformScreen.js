@@ -16,9 +16,12 @@ import {
     TouchableOpacity,
     ScrollView,
     Picker,
-    Alert
+    Alert,
+    Dimensions
+
 } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const photoOptions = {
 
@@ -42,11 +45,19 @@ export default  class InformScreen extends React.Component {
         tabBar: {
             label: '故障报修',
 
-            icon: ({tintcolor}) => (
-                <Image source={require('../img/tool.png')} style={[{tintcolor:tintcolor}]}/>
+            icon: (obj) => (
+
+                <Icon name="camera-retro" size={30}  color= {obj.tintColor} />
             )
         },
-        title: '故障报修'
+        title: '故障报修',
+        header:{
+            style:{backgroundColor:'#3b5998'},
+            titleStyle:{color:'white'},
+
+
+
+        }
     };
 
     constructor(props) {
@@ -58,6 +69,7 @@ export default  class InformScreen extends React.Component {
 
             placeName: '',
             contactName: abc.params.name,
+            contactid:abc.params.id,
             phoneNumber: '',
             otherInfo: '',
             rated: false,
@@ -125,11 +137,13 @@ export default  class InformScreen extends React.Component {
             errortype: this.state.errorType,
             placename: this.state.placeName,
             contactname: this.state.contactName,
+            contactid: this.state.contactid,
             phonenumber: this.state.phoneNumber,
             otherinfo: this.state.otherInfo,
             rated: this.state.rated,
             number: datenow,
-            fixed: false
+            fixed: false,
+            accepted:false
 
         };
         console.log(JSON.stringify(lists));
@@ -166,14 +180,17 @@ export default  class InformScreen extends React.Component {
 
         return (
             <View>
-                <ScrollView>
+                <ScrollView keyboardDismissMode="on-drag">
 
 
                     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                         <View >
 
-
-                            <Text>请选择故障类型</Text>
+                            <View style={{width:150,margin:10}}>
+                            <Icon.Button name="info" backgroundColor="#3b5998" size={15}>
+                                <Text style={{fontFamily: 'Arial', fontSize: 13,color:'white'}}>请选择故障类型</Text>
+                            </Icon.Button>
+                            </View>
                             <Picker selectedValue={this.state.errorType} mode="dropdown"
                                     onValueChange={(val)=>this.setState({errorType:val})}>
                                 <Picker.Item label="网络故障" value="网络故障"/>
@@ -183,17 +200,33 @@ export default  class InformScreen extends React.Component {
                                 <Picker.Item label='其他故障' value='其他故障'/>
 
                             </Picker>
-                            <Text style={{margin:10}}> 报修人: {this.state.contactName}</Text>
-                            <TextInput style={styles.inputs} placeholder='部门或网点名称' value={this.state.placeName}
-                                       onChangeText={(text)=>this.setState({placeName:text})}/>
 
-                            
-                            <TextInput keyboardType="numeric" style={styles.inputs} placeholder='联系人电话'
+                            <View style={{width:150,margin:10}}>
+                                <Icon.Button name="user-o" backgroundColor="#3b5998" size={15}>
+                                    <Text style={{fontFamily: 'Arial', fontSize: 13,color:'white'}}> 报修人: {this.state.contactName}</Text>
+                                </Icon.Button>
+
+                            </View>
+                            <View style={{flexDirection:'row' ,justifyContent:'center',alignItems:'center'}}>
+                                <Text>无锡分行</Text>
+                            <TextInput  style={styles.placeinputs} placeholder='部门或网点名称' value={this.state.placeName}
+                                       onChangeText={(text)=>this.setState({placeName:text})}/><Text>支行(部)</Text>
+                            </View>
+
+                            <View style={{flexDirection:'row' ,justifyContent:'center',alignItems:'center'}}>
+
+                            <TextInput keyboardType="numeric" style={styles.inputs} placeholder='联系电话'
                                        value={this.state.phoneNumber}
                                        onChangeText={(text)=>this.setState({phoneNumber:text})}/>
+                            </View>
 
-                            <TextInput style={styles.inputs} placeholder='故障说明' value={this.state.otherInfo}
+
+
+                            <View style={{flexDirection:'row' ,justifyContent:'center',alignItems:'center'}}>
+                            <TextInput style={styles.infoinputs}  multiline={true} placeholder='故障说明' value={this.state.otherInfo}
                                        onChangeText={(text)=>this.setState({otherInfo:text})}/>
+                            </View>
+
 
 
                             <View
@@ -226,15 +259,40 @@ export default  class InformScreen extends React.Component {
         );
     }
 }
+
+const {height, width} = Dimensions.get('window');
 const styles = StyleSheet.create({
 
     inputs: {
         height: 40,
+        width:200,
         fontSize: 15,
         backgroundColor: '#FFF',
         marginLeft: 10,
         marginRight: 10,
-        marginBottom: 10
+        marginBottom: 10,
+        borderRadius:5
+    },
+    infoinputs:{
+        height: 120,
+        width:width-30,
+        fontSize: 15,
+        backgroundColor: '#FFF',
+        marginLeft: 10,
+        marginRight: 10,
+        marginBottom: 10,
+        borderRadius:5
+
+    },
+    placeinputs: {
+        height: 40,
+        width:170,
+        fontSize: 15,
+        backgroundColor: '#FFF',
+        marginLeft: 10,
+        marginRight: 10,
+        marginBottom: 10,
+        borderRadius:5
     },
 
 });

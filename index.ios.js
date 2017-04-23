@@ -21,20 +21,29 @@ import {
     Keyboard,
     TouchableWithoutFeedback,
     TouchableOpacity,
-    ListView
+    ListView,
+    StatusBar
 } from 'react-native';
 
 import {StackNavigator} from 'react-navigation';
 import {TabNavigator}   from 'react-navigation';
+
 import HomeScreen from './components/HomeScreen';
 import InformScreen from './components/InformScreen';
 import ScoreScreen from './components/ScoreScreen';
 import FaqScreen from './components/FaqScreen';
 import  ChooseScreen from './components/ChooseScreen';
-import FixScreen from './components/FixScreen'
+import FixScreen from './components/FixScreen';
+import HandleScreen from './components/HandleScreen';
+import RateScreen from './components/RateScreen';
+import AcceptScreen from './components/AcceptScreen';
+import MineScreen from './components/MineScreen'
+
 class LoginScreen extends React.Component {
     static navigationOptions = {header:{
-        left:null
+        left:null,
+        style:{backgroundColor:'#3b5998'},
+        titleStyle:{color:'white'}
 
 
     },
@@ -52,30 +61,31 @@ class LoginScreen extends React.Component {
     submits() {
 
         const {navigate}= this.props.navigation;
-        // const lists= {
-        //   CMCODE:this.state.CMCODE, REGPASSWORD: this.state.REGPASSWORD
-        // };
-        // fetch('http://127.0.0.1:8080/login', {
-        //     method: 'post',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify(lists),
-        // })
-        //     .then((response) => {
-        //
-        //         return response.json()
-        //     })
-        //     .then((responseData) => {
-        //         Alert.alert(responseData[0]);
-        //         if(responseData [0]== 'success'){
-        //             navigate('ChooseScreen',{name:responseData[1]})
-        //         }
-        //     })
-        //     .catch((error) => {
-        //         console.error('error', error)
-        //     });
-        navigate('ChooseScreen',{name:'blunt'})
+        const lists= {
+          CMCODE:this.state.CMCODE, REGPASSWORD: this.state.REGPASSWORD
+        };
+        fetch('http://127.0.0.1:8080/login', {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(lists),
+        })
+            .then((response) => {
+
+                return response.json()
+            })
+            .then((responseData) => {
+                Alert.alert(responseData[0]);
+                if(responseData [0]== 'success'){
+                    navigate('ChooseScreen',{name:responseData[1],id:this.state.CMCODE})
+                }
+            })
+            .catch((error) => {
+                console.error('error', error)
+            });
+        // navigate('ChooseScreen',{name:'blunt',id:'123456'});
+
     }
 
     render() {
@@ -83,6 +93,10 @@ class LoginScreen extends React.Component {
 
         return (
             <View style={{flexDirection:'column',alignItems:'center'}}>
+                <StatusBar
+                    backgroundColor="blue"
+                    barStyle="light-content"
+                />
                 <View>
                     <Image source={require('./img/bocimgs.png')}/>
                 </View>
@@ -99,9 +113,9 @@ class LoginScreen extends React.Component {
                     </TextInput>
                 </View>
                 <View
-                    style={{height:25,borderRadius:5,backgroundColor:'rgb(88,196,250)',margin:20,alignSelf:'stretch',flexDirection:'column',alignItems:'center'}}>
+                    style={{height:25,borderRadius:5,backgroundColor:'#3b5998',margin:20,alignSelf:'stretch',flexDirection:'column',alignItems:'center'}}>
                     <TouchableOpacity onPress={this.submits}><Text
-                        style={{color:'white',fontSize:20,width:200,textAlign:'center'}}>登录</Text></TouchableOpacity>
+                        style={{color:'rgb(233,233,239)',fontSize:20,width:200,textAlign:'center'}}>登录</Text></TouchableOpacity>
                 </View>
             </View>
         )
@@ -133,28 +147,57 @@ const styles = StyleSheet.create({
     },
     inputs: {height: 40, width: 120, borderColor: 'gray', borderWidth: 3, marginBottom: 20},
     est: {opacity: 1}
-})
+});
+
+
+
+const handleFixNavigator = StackNavigator({
+    Fix :{screen:FixScreen},
+    Accept: {screen: AcceptScreen}
+
+},{
+    headerMode:'none'
+});
+
+const myHandleListNavigator = StackNavigator({
+    Mine:{screen:MineScreen},
+    Handle:{screen:HandleScreen}
+},
+    {
+        headerMode:'none'
+    });
+
+const scoreRateNavigator = StackNavigator({
+   score : {screen:ScoreScreen},
+   rate:   {screen:RateScreen}
+},
+{
+    headerMode:'none'
+}
+);
 const MainScreenNavigator = TabNavigator({
         Home: {screen: HomeScreen},
         Inform: {screen: InformScreen},
-        Score: {screen: ScoreScreen},
+        scoreRate: {screen: scoreRateNavigator},
         Faq: {screen: FaqScreen}
     },
     {
         tabBarOptions: {
-            activeTintColor: 'rgb(18,120,189)',
+            activeTintColor: '#3b5998',
+            inactiveTintColor: '#cccccc'
 
         },
     });
 const ViceScreenNavigator = TabNavigator({
         Home: {screen: HomeScreen},
-        Fix: {screen: FixScreen},
-        Score: {screen: ScoreScreen},
-        Faq: {screen: FaqScreen}
+        Fixes: {screen: handleFixNavigator},
+
+        Faq: {screen: myHandleListNavigator}
     },
     {
         tabBarOptions: {
-            activeTintColor: 'rgb(18,120,189)',
+            activeTintColor: '#3b5998',
+            inactiveTintColor: '#cccccc'
 
         },
     });

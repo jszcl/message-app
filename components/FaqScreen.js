@@ -19,17 +19,27 @@ import {
     ScrollView
 
 } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import Panel  from  './collapse';
 export default  class FaqScreen extends React.Component {
     static navigationOptions = {
         tabBar: {
             label: '常见问题',
-            icon: ({tintcolor}) => (
-                <Image source={require('../img/faq.png')} style={[{tintcolor:tintcolor}]}/>
+
+            icon: (obj) => (
+
+                <Icon name="book" size={30}  color= {obj.tintColor} />
             )
         },
-        title: '常见问题'
+        title: '常见问题',
+        header:{
+            style:{backgroundColor:'#3b5998'},
+            titleStyle:{color:'white'},
+
+
+
+        }
     };
 
     constructor(props) {
@@ -37,6 +47,7 @@ export default  class FaqScreen extends React.Component {
     }
 
     render() {
+
         return (
             <ScrollView style={{flex:1,paddingTop: 30 }}>
                 <Panel title='A Panel with short content text'>
