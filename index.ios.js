@@ -59,7 +59,7 @@ class LoginScreen extends React.Component {
     }
 
     submits() {
-
+        const stuff = ['157094','112077','113015','113004','113022'];
         const {navigate}= this.props.navigation;
         const lists= {
           CMCODE:this.state.CMCODE, REGPASSWORD: this.state.REGPASSWORD
@@ -78,7 +78,13 @@ class LoginScreen extends React.Component {
             .then((responseData) => {
                 Alert.alert(responseData[0]);
                 if(responseData [0]== 'success'){
-                    navigate('ChooseScreen',{name:responseData[1],id:this.state.CMCODE})
+
+                    if (stuff.includes(this.state.CMCODE)) {
+                    navigate('ChooseScreen',{name:responseData[1],id:this.state.CMCODE}) }
+
+                    else {
+                        navigate('MainScreen',{name:responseData[1],id:this.state.CMCODE})
+                    }
                 }
             })
             .catch((error) => {

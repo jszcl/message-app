@@ -63,6 +63,7 @@ export default  class FaqScreen extends React.Component {
                     <Image source={require('../img/tool.png')} style={{height: 200, width: null, resizeMode: 'contain'}}/>
                 </Panel>
             </ScrollView>
+
         )
     }
 }

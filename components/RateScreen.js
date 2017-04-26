@@ -184,7 +184,7 @@ export default class RateScreen extends  React.Component {
                         <Icon.Button name="calendar" backgroundColor="#3b5998" size={15}>
                             <Text style={{fontFamily: 'Arial', fontSize: 13,color:'white'}}>维修日期</Text>
                         </Icon.Button>
-                        <Text>{this.state.detail.fixdate}</Text>
+                        <Text>{(new Date(this.state.detail.fixdate)).toLocaleDateString()}</Text>
                     </View>
                 </View>
 

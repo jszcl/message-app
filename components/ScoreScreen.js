@@ -109,9 +109,9 @@ export default  class ScoreScreen extends React.Component {
                     <Text style={styles.rowStyle}>{rowData.errortype}</Text>
                     <Text style={styles.rowStyle}>{this.toDateString(rowData.number)}</Text>
                     <View style={{width:80,marginTop:10 }}>
-               {rowData.fixed  ? <Icon.Button name='arrow-right' backgroundColor="#3b5998" size={10} iconStyle={{}} onPress={()=>{this.props.navigation.navigate('rate',{name:rowData,refresh:this.updateSource})}}>
+               {rowData.fixed  ? <Icon.Button name='arrow-right' backgroundColor="#990066" size={10} iconStyle={{}} onPress={()=>{this.props.navigation.navigate('rate',{name:rowData,refresh:this.updateSource})}}>
                     评价
-                </Icon.Button> : <Text>待维修</Text>}
+                </Icon.Button> : <Text style={{marginTop:8}}>待维修</Text>}
                 </View>
 
 
